@@ -3,9 +3,6 @@
 from PyQt5 import QtWidgets, QtCore
 from mainwin import Ui_MainWindow
 import sys
-import logging
-
-logging.basicConfig(filename="logs.log", level=logging.INFO)
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -46,14 +43,11 @@ class MainWindow(QtWidgets.QMainWindow):
             mi = self.model.index(i, 0, index)
             fileInfo = self.model.fileInfo(mi)
             file_data = ','.join(['%s%s,%s\n' % (file_data, fileInfo.fileName(), fileInfo.absoluteFilePath())])
-            logging.debug(fileInfo.fileName(), fileInfo.absoluteFilePath())
-        try:
-            fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Save File', filter='*.csv')
+        fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Save File', filter='*.csv')
+        if fname:
             file = open(fname[0], 'w')
             file.write(file_data)
             file.close()
-        except Exception as ex:
-            logging.error(ex)
 
     @QtCore.pyqtSlot(str)
     def onTextChanged(self, txt):
